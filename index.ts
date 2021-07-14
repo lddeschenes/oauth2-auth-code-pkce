@@ -13,6 +13,7 @@ export interface Configuration {
   tokenUrl: URL;
   extraAuthorizationParams?: ObjStringDict;
   extraRefreshParams?: ObjStringDict;
+  clientSecret: string;
 }
 
 export interface PKCECodes {
@@ -518,7 +519,7 @@ export class OAuth2AuthCodePKCE {
       authorizationCode = codeOverride,
       codeVerifier = ''
     } = this.state;
-    const { clientId, onInvalidGrant, redirectUrl } = this.config;
+    const { clientId, onInvalidGrant, redirectUrl, clientSecret } = this.config;
 
     if (!codeVerifier) {
       console.warn('No code verifier is being sent.');
@@ -531,6 +532,7 @@ export class OAuth2AuthCodePKCE {
       + `code=${encodeURIComponent(authorizationCode || '')}&`
       + `redirect_uri=${encodeURIComponent(redirectUrl)}&`
       + `client_id=${encodeURIComponent(clientId)}&`
+      + `client_secret=${encodeURIComponent(clientSecret)}&`
       + `code_verifier=${codeVerifier}`;
 
     return fetch(url, {
